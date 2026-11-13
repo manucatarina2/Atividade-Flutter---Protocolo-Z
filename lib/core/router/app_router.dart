@@ -13,6 +13,7 @@ import '../../screens/map/map_screen.dart';
 import '../../screens/expedition/expedition_screen.dart';
 import '../../screens/inventory/inventory_screen.dart';
 import '../../screens/trade/trade_list_screen.dart';
+import '../../screens/trade/trade_create_screen.dart'; // <-- NOVO IMPORT AQUI
 import '../../screens/ranking/ranking_screen.dart';
 import '../../screens/profile/profile_screen.dart';
 
@@ -67,7 +68,7 @@ final appRouterProvider = Provider<GoRouter>((ref) {
       GoRoute(path: '/login', builder: (_, __) => const LoginScreen()),
       GoRoute(path: '/register', builder: (_, __) => const RegisterScreen()),
 
-      // Rota de escolha de facção (Fica FORA do ShellRoute, pois não tem bottom nav)
+      // Rota de escolha de facção
       GoRoute(
         path: '/escolher-faccao',
         builder: (_, __) => const FactionChoiceScreen(),
@@ -84,7 +85,17 @@ final appRouterProvider = Provider<GoRouter>((ref) {
               builder: (_, __) => const ExpeditionScreen()),
           GoRoute(
               path: '/inventario', builder: (_, __) => const InventoryScreen()),
-          GoRoute(path: '/trocas', builder: (_, __) => const TradeListScreen()),
+          GoRoute(
+            path: '/trocas',
+            builder: (_, __) => const TradeListScreen(),
+            routes: [
+              // Rota filha para a tela de criar nova troca
+              GoRoute(
+                path: 'nova', // O caminho final fica /trocas/nova
+                builder: (_, __) => const TradeCreateScreen(),
+              ),
+            ],
+          ),
           GoRoute(path: '/ranking', builder: (_, __) => const RankingScreen()),
           GoRoute(path: '/perfil', builder: (_, __) => const ProfileScreen()),
         ],

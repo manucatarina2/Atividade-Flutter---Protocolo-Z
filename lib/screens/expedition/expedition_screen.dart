@@ -77,7 +77,7 @@ class ExpeditionScreen extends ConsumerWidget {
                         .read(expeditionRepositoryProvider)
                         .collectRewards(expedition.id);
                     ref.invalidate(activeExpeditionProvider);
-                    ref.invalidate(inventoryProvider); // Atualiza o inventário
+                    ref.invalidate(inventoryProvider);
 
                     if (context.mounted) {
                       Navigator.pop(context);
@@ -108,6 +108,19 @@ class ExpeditionScreen extends ConsumerWidget {
       loading: () => const Center(child: CircularProgressIndicator()),
       error: (e, _) => Center(child: Text('Erro: $e')),
       data: (types) {
+        if (types.isEmpty) {
+          return const Center(
+            child: Padding(
+              padding: EdgeInsets.all(24.0),
+              child: Text(
+                'Nenhum tipo de expedição disponível.\nVerifique o banco de dados.',
+                textAlign: TextAlign.center,
+                style: TextStyle(color: AppColors.textSecondary),
+              ),
+            ),
+          );
+        }
+
         return ListView.builder(
           padding: const EdgeInsets.all(16),
           itemCount: types.length,
