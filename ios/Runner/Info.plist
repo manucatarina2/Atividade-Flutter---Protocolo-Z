@@ -5,7 +5,7 @@
 	<key>CFBundleDevelopmentRegion</key>
 	<string>$(DEVELOPMENT_LANGUAGE)</string>
 	<key>CFBundleDisplayName</key>
-	<string>Protocoloz</string>
+	<string>Protocolo Z</string>
 	<key>CFBundleExecutable</key>
 	<string>$(EXECUTABLE_NAME)</string>
 	<key>CFBundleIdentifier</key>
@@ -45,5 +45,13 @@
 	<true/>
 	<key>UIApplicationSupportsIndirectInputEvents</key>
 	<true/>
+	
+	<!-- PERMISSÕES DO PROTOCOLO Z -->
+	<key>NSLocationWhenInUseUsageDescription</key>
+	<string>Precisamos da sua localização para mostrar abrigos e hordas próximas no mapa.</string>
+	<key>NSCameraUsageDescription</key>
+	<string>Precisamos da câmera para você tirar fotos dos abrigos e do seu avatar.</string>
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>Precisamos acessar suas fotos para você escolher imagens para os abrigos e avatar.</string>
 </dict>
 </plist>

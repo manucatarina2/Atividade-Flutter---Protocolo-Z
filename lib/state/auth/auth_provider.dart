@@ -2,6 +2,7 @@ import 'dart:async';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import '../../repositories/auth_repository.dart';
+import '../../repositories/faction_repository.dart';
 import '../../repositories/profile_repository.dart';
 import 'auth_state.dart';
 
@@ -88,6 +89,16 @@ class AuthNotifier extends StateNotifier<AppAuthState> {
   }
 
   Future<void> refresh() async => _loadProfile();
+
+  Future<String?> chooseFaction(String factionId) async {
+    try {
+      await FactionRepository().chooseFaction(factionId);
+      await _loadProfile();
+      return null;
+    } catch (e) {
+      return e.toString();
+    }
+  }
 
   String _translateError(AuthException e) {
     final msg = e.message.toLowerCase();

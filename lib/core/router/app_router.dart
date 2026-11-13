@@ -6,6 +6,7 @@ import '../../state/auth/auth_state.dart';
 import '../../screens/splash/splash_screen.dart';
 import '../../screens/auth/login_screen.dart';
 import '../../screens/auth/register_screen.dart';
+import '../../screens/faction/faction_choice_screen.dart';
 import '../../screens/shell/main_shell.dart';
 import '../../screens/home/home_screen.dart';
 import '../../screens/map/map_screen.dart';
@@ -14,7 +15,6 @@ import '../../screens/inventory/inventory_screen.dart';
 import '../../screens/trade/trade_list_screen.dart';
 import '../../screens/ranking/ranking_screen.dart';
 import '../../screens/profile/profile_screen.dart';
-import '../../widgets/loading_indicator.dart';
 
 final _rootNavigatorKey = GlobalKey<NavigatorState>();
 final _shellNavigatorKey = GlobalKey<NavigatorState>();
@@ -36,33 +36,43 @@ final appRouterProvider = Provider<GoRouter>((ref) {
 
       final isSplash = loc == '/splash';
       final isAuthRoute = loc == '/login' || loc == '/register';
+      final isFactionRoute = loc == '/escolher-faccao';
 
+      // 1. Carregando sessão
       if (auth.status == AuthStatus.loading) {
         return isSplash ? null : '/splash';
       }
 
+      // 2. Não autenticado
       if (auth.status == AuthStatus.unauthenticated) {
-        // Pode ir para login/register; qualquer outra rota interna volta pro login
         if (isAuthRoute) return null;
         return '/login';
       }
 
-      // Autenticado
+      // 3. Autenticado SEM facção
       if (!auth.hasFaction) {
-        // Sem facção: ainda não temos a tela de escolha, então mandamos pra home provisoriamente
-        // (vamos ajustar quando criarmos a tela de escolha de facção)
-        if (isAuthRoute || isSplash) return '/home';
-        return null;
+        if (isFactionRoute) return null;
+        return '/escolher-faccao';
       }
 
-      // Autenticado com facção
-      if (isAuthRoute || isSplash) return '/home';
+      // 4. Autenticado COM facção
+      if (isAuthRoute || isSplash || isFactionRoute) {
+        return '/home';
+      }
+
       return null;
     },
     routes: [
       GoRoute(path: '/splash', builder: (_, __) => const SplashScreen()),
       GoRoute(path: '/login', builder: (_, __) => const LoginScreen()),
       GoRoute(path: '/register', builder: (_, __) => const RegisterScreen()),
+
+      // Rota de escolha de facção (Fica FORA do ShellRoute, pois não tem bottom nav)
+      GoRoute(
+        path: '/escolher-faccao',
+        builder: (_, __) => const FactionChoiceScreen(),
+      ),
+
       ShellRoute(
         navigatorKey: _shellNavigatorKey,
         builder: (context, state, child) => MainShell(child: child),
